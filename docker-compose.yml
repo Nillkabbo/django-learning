@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  db:
+    container_name: db
+    image: postgres:15.0-alpine
+    ports:
+      - "${DB_OUT_PORT}:${DB_IN_PORT}"
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: parkit-pgadmin
+    depends_on:
+      - db
+    ports:
+      - "${PGADMIN_OUT_PORT}:${PGADMIN_IN_PORT}"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    restart: always
